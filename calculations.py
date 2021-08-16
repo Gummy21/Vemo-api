@@ -1,8 +1,11 @@
 import pandas
+import json
+
 
 
 
 def histogram(df):
+    
     df['Date'] = pandas.to_datetime(df["Date"])
     df.sort_values(by="Date", inplace=True, ascending=False)
     df["Returns"] = (df["Close"] - df["Open"]) / df["Open"]
@@ -31,24 +34,35 @@ def histogram(df):
             (df["Returns"] >= std_dev[3]["Lower"])]
             ["Returns"].count()
     }
+    counts = [
+        int(df[(df["Returns"] <= -0.015)]["Returns"].count()),
+        int(df[(df["Returns"].between(-0.015, -0.01))]["Returns"].count()),
+        int(df[(df["Returns"].between(-0.01, -0.005))]["Returns"].count()),
+        int(df[(df["Returns"].between(-0.005, 0))]["Returns"].count()),
+        int(df[(df["Returns"].between(0, 0.005))]["Returns"].count()),
+        int(df[(df["Returns"].between(0.005, 0.01))]["Returns"].count()),
+        int(df[(df["Returns"].between(0.01, 0.015))]["Returns"].count()),
+        int(df[(df["Returns"] >= 0.015)]["Returns"].count())
+        
+    ]
 
     std_percent = {
         1:(std_count[1]/count),
         2:(std_count[2]/count),
         3:(std_count[3]/count)
     }
-    returns = df['Returns'].to_dict()
-    statistics = {"Percents":std_percent,"Returns":returns}
+    
    
+    statistics = {"Percents":std_percent,"Returns":counts}
+    
     return statistics
 
 
 
 
 
-
 def atr(df,timeframe):
-    
+  
     df['Date'] = pandas.to_datetime(df["Date"])
     df.sort_values(by="Date", inplace=True, ascending=False)
 
@@ -59,40 +73,35 @@ def atr(df,timeframe):
     average_atr = {}
     if timeframe == "Daily":
         average_atr = {
-            "1Week":df["ATR"].head(5).describe()["mean"],
-            "1Month":df["ATR"].head(25).describe()["mean"],
-            "3Months":df["ATR"].head(75).describe()["mean"],
-            "1Year":df["ATR"].head(251).describe()["mean"],
-            "2Years":df["ATR"].head(501).describe()["mean"]
+            "1 Week":(df["ATR"].head(5).describe()["mean"] * 100),
+            "1 Month":(df["ATR"].head(25).describe()["mean"] * 100),
+            "3 Months":(df["ATR"].head(75).describe()["mean"] * 100),
+            "1 Year":(df["ATR"].head(251).describe()["mean"] * 100),
+            "2 Years":(df["ATR"].head(501).describe()["mean"] * 100)
         }
         
     
     elif timeframe == "Weekly":
         average_atr = {
-            "12Weeks":df["ATR"].head(12).describe()["mean"],
-            "26Weeks":df["ATR"].head(26).describe()["mean"],
-            "52Weeks":df["ATR"].head(52).describe()["mean"],
-            "104Weeks":df["ATR"].head(104).describe()["mean"],
-            "156Weeks":df["ATR"].head(156).describe()["mean"]
+            "12 Weeks":(df["ATR"].head(12).describe()["mean"] * 100),
+            "24 Weeks":(df["ATR"].head(26).describe()["mean"] * 100),
+            "52 Weeks":(df["ATR"].head(52).describe()["mean"] * 100),
+            "104 Weeks":(df["ATR"].head(104).describe()["mean"] * 100),
+            "156 Weeks":(df["ATR"].head(156).describe()["mean"] * 100)
         }
        
     
     elif timeframe == "Monthly":
         average_atr = {
-            "6Months":df["ATR"].head(6).describe()["mean"],
-            "12Months":df["ATR"].head(12).describe()["mean"],
-            "24Months":df["ATR"].head(24).describe()["mean"],
-            "36Months":df["ATR"].head(36).describe()["mean"],
-            "60Months":df["ATR"].head(60).describe()["mean"]
+            "6 Months":(df["ATR"].head(6).describe()["mean"] * 100),
+            "12 Months":(df["ATR"].head(12).describe()["mean"] * 100),
+            "24 Months":(df["ATR"].head(24).describe()["mean"] * 100),
+            "36 Months":(df["ATR"].head(36).describe()["mean"] * 100),
+            "60 Months":(df["ATR"].head(60).describe()["mean"] * 100)
         }
     else:
         return "Wrong Timeframe"
-        
+    
     return average_atr
     
     
-
-# def toJson():
-#     for row in data.iterrows():
-#         "data": row["returns"]
-#     pass
