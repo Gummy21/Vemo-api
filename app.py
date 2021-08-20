@@ -30,7 +30,6 @@ def hello():
 @app.route("/calculate", methods=['POST'])
 def calculate():
     # Check if csv
-    print(request.files["file"])
     df = pandas.read_csv(request.files["file"])
     timeframe = request.form['timeframe']
     stats = {

@@ -47,12 +47,12 @@ def histogram(df):
     ]
 
     std_percent = {
-        1:(std_count[1]/count),
-        2:(std_count[2]/count),
-        3:(std_count[3]/count)
+        1:(round(std_count[1]/count * 100, 2)),
+        2:(round(std_count[2]/count * 100,2)),
+        3:(round(std_count[3]/count * 100,2))
     }
     
-   
+    print(std_percent)
     statistics = {"Percents":std_percent,"Returns":counts}
     
     return statistics
@@ -73,31 +73,61 @@ def atr(df,timeframe):
     average_atr = {}
     if timeframe == "Daily":
         average_atr = {
-            "1 Week":(df["ATR"].head(5).describe()["mean"] * 100),
-            "1 Month":(df["ATR"].head(25).describe()["mean"] * 100),
-            "3 Months":(df["ATR"].head(75).describe()["mean"] * 100),
-            "1 Year":(df["ATR"].head(251).describe()["mean"] * 100),
-            "2 Years":(df["ATR"].head(501).describe()["mean"] * 100)
+            "values": [
+                df["ATR"].head(5).describe()["mean"] * 100,
+                df["ATR"].head(25).describe()["mean"] * 100,    
+                df["ATR"].head(75).describe()["mean"] * 100,
+                df["ATR"].head(255).describe()["mean"] * 100,
+                df["ATR"].head(501).describe()["mean"] * 100
+            ],
+            "labels":[
+                "1 Week",
+                "1 Month",
+                "3 Months",
+                "1 Year",
+                "2 Years"
+            ]
+            
         }
         
     
     elif timeframe == "Weekly":
         average_atr = {
-            "12 Weeks":(df["ATR"].head(12).describe()["mean"] * 100),
-            "24 Weeks":(df["ATR"].head(26).describe()["mean"] * 100),
-            "52 Weeks":(df["ATR"].head(52).describe()["mean"] * 100),
-            "104 Weeks":(df["ATR"].head(104).describe()["mean"] * 100),
-            "156 Weeks":(df["ATR"].head(156).describe()["mean"] * 100)
+             "values": [
+                df["ATR"].head(12).describe()["mean"] * 100,
+                df["ATR"].head(26).describe()["mean"] * 100,    
+                df["ATR"].head(52).describe()["mean"] * 100,
+                df["ATR"].head(104).describe()["mean"] * 100,
+                df["ATR"].head(156).describe()["mean"] * 100
+            ],
+            "labels": [
+                "12 Weeks",
+                "24 Weeks",
+                "52 Weeks",
+                "104 Weeks",
+                "156 Weeks"
+            ]
+            
         }
        
     
     elif timeframe == "Monthly":
         average_atr = {
-            "6 Months":(df["ATR"].head(6).describe()["mean"] * 100),
-            "12 Months":(df["ATR"].head(12).describe()["mean"] * 100),
-            "24 Months":(df["ATR"].head(24).describe()["mean"] * 100),
-            "36 Months":(df["ATR"].head(36).describe()["mean"] * 100),
-            "60 Months":(df["ATR"].head(60).describe()["mean"] * 100)
+            "values": [
+                df["ATR"].head(12).describe()["mean"] * 100,
+                df["ATR"].head(26).describe()["mean"] * 100,    
+                df["ATR"].head(52).describe()["mean"] * 100,
+                df["ATR"].head(104).describe()["mean"] * 100,
+                df["ATR"].head(156).describe()["mean"] * 100
+            ],
+            "labels" :[
+                "6 Months",
+                "12 Months",
+                "24 Months",
+                "36 Months",
+                "60 Months"
+            ]
+            
         }
     else:
         return "Wrong Timeframe"
