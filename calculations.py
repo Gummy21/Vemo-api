@@ -4,7 +4,7 @@ import json
 
 
 
-def histogram(df):
+def returns(df):
     
     df['Date'] = pandas.to_datetime(df["Date"])
     df.sort_values(by="Date", inplace=True, ascending=False)
@@ -51,9 +51,27 @@ def histogram(df):
         2:(round(std_count[2]/count * 100,2)),
         3:(round(std_count[3]/count * 100,2))
     }
-    
-    print(std_percent)
-    statistics = {"Percents":std_percent,"Returns":counts}
+
+    mean_returns = {
+        'mean':[round(stats["mean"] * 100,2),round(stats["std"] * 100,2)],
+        'counts': [
+            int(df[(df["Returns"].between(std_dev[3]["Lower"], stats["mean"] ))]["Returns"].count()),
+            int(df[(df["Returns"].between(std_dev[2]["Lower"], stats["mean"] ))]["Returns"].count()),
+            int(df[(df["Returns"].between(std_dev[1]["Lower"], stats["mean"] ))]["Returns"].count()),
+            int(df[(df["Returns"].between(stats["mean"],std_dev[1]["Upper"] ))]["Returns"].count()),
+            int(df[(df["Returns"].between(stats["mean"],std_dev[2]["Upper"] ))]["Returns"].count()),
+            int(df[(df["Returns"].between(stats["mean"],std_dev[3]["Upper"] ))]["Returns"].count())
+        ],
+        "values":[
+            round(std_dev[3]["Lower"] * 100,2),
+            round(std_dev[2]["Lower"] * 100,2),
+            round(std_dev[1]["Lower"] * 100,2),
+            round(std_dev[1]["Upper"] * 100,2),
+            round(std_dev[2]["Upper"] * 100,2),
+            round(std_dev[3]["Upper"] * 100,2) 
+        ]  
+    }
+    statistics = {"Percents":std_percent,"Returns":counts,"MeanReturns":mean_returns}
     
     return statistics
 
@@ -74,11 +92,11 @@ def atr(df,timeframe):
     if timeframe == "Daily":
         average_atr = {
             "values": [
-                df["ATR"].head(5).describe()["mean"] * 100,
-                df["ATR"].head(25).describe()["mean"] * 100,    
-                df["ATR"].head(75).describe()["mean"] * 100,
-                df["ATR"].head(255).describe()["mean"] * 100,
-                df["ATR"].head(501).describe()["mean"] * 100
+                round(df["ATR"].head(5).describe()["mean"] * 100,2),
+                round(df["ATR"].head(25).describe()["mean"] * 100,2),    
+                round(df["ATR"].head(75).describe()["mean"] * 100,2),
+                round(df["ATR"].head(255).describe()["mean"] * 100,2),
+                round(df["ATR"].head(501).describe()["mean"] * 100,2)
             ],
             "labels":[
                 "1 Week",
@@ -94,11 +112,11 @@ def atr(df,timeframe):
     elif timeframe == "Weekly":
         average_atr = {
              "values": [
-                df["ATR"].head(12).describe()["mean"] * 100,
-                df["ATR"].head(26).describe()["mean"] * 100,    
-                df["ATR"].head(52).describe()["mean"] * 100,
-                df["ATR"].head(104).describe()["mean"] * 100,
-                df["ATR"].head(156).describe()["mean"] * 100
+                round(df["ATR"].head(12).describe()["mean"] * 100,2),
+                round(df["ATR"].head(26).describe()["mean"] * 100,2),    
+                round(df["ATR"].head(52).describe()["mean"] * 100,2),
+                round(df["ATR"].head(104).describe()["mean"] * 100,2),
+                round(df["ATR"].head(156).describe()["mean"] * 100,2)
             ],
             "labels": [
                 "12 Weeks",
@@ -114,11 +132,11 @@ def atr(df,timeframe):
     elif timeframe == "Monthly":
         average_atr = {
             "values": [
-                df["ATR"].head(12).describe()["mean"] * 100,
-                df["ATR"].head(26).describe()["mean"] * 100,    
-                df["ATR"].head(52).describe()["mean"] * 100,
-                df["ATR"].head(104).describe()["mean"] * 100,
-                df["ATR"].head(156).describe()["mean"] * 100
+                round(df["ATR"].head(12).describe()["mean"] * 100,2),
+                round(df["ATR"].head(26).describe()["mean"] * 100,2),    
+                round(df["ATR"].head(52).describe()["mean"] * 100,2),
+                round(df["ATR"].head(104).describe()["mean"] * 100,2),
+                round(df["ATR"].head(156).describe()["mean"] * 100,2)
             ],
             "labels" :[
                 "6 Months",

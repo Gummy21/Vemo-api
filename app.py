@@ -17,7 +17,7 @@ def hello():
     data = pandas.read_csv("AUDJPY=X.csv")
     df = data.dropna().copy()
     stats ={
-        "histogram":histogram(df),
+        "histogram":returns(df),
         "ATR":atr(df,"Daily")
     }
     stats = json.dumps(stats)
@@ -33,7 +33,7 @@ def calculate():
     df = pandas.read_csv(request.files["file"])
     timeframe = request.form['timeframe']
     stats = {
-        "histogram":histogram(df),
+        "histogram":returns(df),
         "ATR":atr(df,timeframe)
     }
     stats = json.dumps(stats)
