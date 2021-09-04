@@ -38,3 +38,4 @@ def calculate():
     }
     stats = json.dumps(stats)
     return stats
+
