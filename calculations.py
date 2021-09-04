@@ -4,7 +4,7 @@ import json
 
 
 
-def returns(df):
+def returns(df,timeframe):
     
     df['Date'] = pandas.to_datetime(df["Date"])
     df.sort_values(by="Date", inplace=True, ascending=False)
@@ -34,17 +34,81 @@ def returns(df):
             (df["Returns"] >= std_dev[3]["Lower"])]
             ["Returns"].count()
     }
-    counts = [
-        int(df[(df["Returns"] <= -0.015)]["Returns"].count()),
-        int(df[(df["Returns"].between(-0.015, -0.01))]["Returns"].count()),
-        int(df[(df["Returns"].between(-0.01, -0.005))]["Returns"].count()),
-        int(df[(df["Returns"].between(-0.005, 0))]["Returns"].count()),
-        int(df[(df["Returns"].between(0, 0.005))]["Returns"].count()),
-        int(df[(df["Returns"].between(0.005, 0.01))]["Returns"].count()),
-        int(df[(df["Returns"].between(0.01, 0.015))]["Returns"].count()),
-        int(df[(df["Returns"] >= 0.015)]["Returns"].count())
-        
-    ]
+
+    if timeframe == "Daily":
+        counts = {
+            "returns": [
+                int(df[(df["Returns"] <= -0.015)]["Returns"].count()),
+                int(df[(df["Returns"].between(-0.015, -0.01))]["Returns"].count()),
+                int(df[(df["Returns"].between(-0.01, -0.005))]["Returns"].count()),
+                int(df[(df["Returns"].between(-0.005, 0))]["Returns"].count()),
+                int(df[(df["Returns"].between(0, 0.005))]["Returns"].count()),
+                int(df[(df["Returns"].between(0.005, 0.01))]["Returns"].count()),
+                int(df[(df["Returns"].between(0.01, 0.015))]["Returns"].count()),
+                int(df[(df["Returns"] >= 0.015)]["Returns"].count())
+            ],
+            "labels": [
+                'Less than 1.5%', 
+                '-1.5% to -1%', 
+                '-1% to -0.5%', 
+                '-0.5% to 0%', 
+                '0% to 0.5%', 
+                '0.5% to 1%',
+                '1% to 1.5%', 
+                'More than 1.5%'
+            ]
+        }
+    elif timeframe == "Weekly":
+        counts = {
+            "returns":[
+                int(df[(df["Returns"] <= -0.025)]["Returns"].count()),
+                int(df[(df["Returns"].between(-0.025, -0.02))]["Returns"].count()),
+                int(df[(df["Returns"].between(-0.02, -0.01))]["Returns"].count()),
+                int(df[(df["Returns"].between(-0.01, 0))]["Returns"].count()),
+                int(df[(df["Returns"].between(0, 0.01))]["Returns"].count()),
+                int(df[(df["Returns"].between(0.01, 0.02))]["Returns"].count()),
+                int(df[(df["Returns"].between(0.02, 0.025))]["Returns"].count()),
+                int(df[(df["Returns"] >= 0.025)]["Returns"].count())   
+            ],
+            "labels":[
+                'Less than 2.5%', 
+                '-2.5% to -2%', 
+                '-2% to -1%', 
+                '-1% to 0%', 
+                '0% to 1%', 
+                '1% to 2%',
+                '2% to 2.5%', 
+                'More than 2.5%'
+            ]
+            
+            
+        }
+    elif timeframe == "Monthly":
+        counts = {
+            "returns": [
+                int(df[(df["Returns"] <= -0.05)]["Returns"].count()),
+                int(df[(df["Returns"].between(-0.05, -0.04))]["Returns"].count()),
+                int(df[(df["Returns"].between(-0.04, -0.02))]["Returns"].count()),
+                int(df[(df["Returns"].between(-0.02, 0))]["Returns"].count()),
+                int(df[(df["Returns"].between(0, 0.02))]["Returns"].count()),
+                int(df[(df["Returns"].between(0.02, 0.04))]["Returns"].count()),
+                int(df[(df["Returns"].between(0.04, 0.05))]["Returns"].count()),
+                int(df[(df["Returns"] >= 0.05)]["Returns"].count())
+            ],
+            "labels": [
+                'Less than 5%', 
+                '-5% to -4%', 
+                '-4% to -2%', 
+                '-2% to 0%', 
+                '0% to 2%', 
+                '2% to 4%',
+                '4% to 5%', 
+                'More than 5%'
+            ]
+            
+            
+        }
+    print(counts)
 
     std_percent = {
         1:(round(std_count[1]/count * 100, 2)),
