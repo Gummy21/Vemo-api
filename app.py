@@ -1,11 +1,13 @@
-from flask import Flask
-from flask import request
-import pandas
-from calculations import *
-from flask_compress import Compress
-from flask_cors import CORS
 import json
 import os
+import pandas
+from flask import Flask
+from flask import request
+from calculations import *
+from flask_cors import CORS
+from flask_compress import Compress
+from werkzeug.middleware.proxy_fix import ProxyFix
+
 
 compress = Compress()
 
