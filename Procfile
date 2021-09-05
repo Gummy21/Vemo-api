@@ -1,1 +1,1 @@
-web: gunicorn -b 127.0.0.1:5000 app:app -w 1
+web: gunicorn -b 0.0.0.0:$PORT app:app -w 1
