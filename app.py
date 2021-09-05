@@ -14,7 +14,7 @@ compress = Compress()
 app = Flask(__name__)
 cors = CORS(app)
 compress.init_app(app)
-
+app.wsgi_app = ProxyFix(app.wsgi_app)
 @app.route("/")
 def hello():
     data = pandas.read_csv("AUDJPY=X.csv")
