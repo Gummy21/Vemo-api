@@ -16,6 +16,11 @@ cors = CORS(app)
 compress.init_app(app)
 app.wsgi_app = ProxyFix(app.wsgi_app)
 
+ALLOWED_EXTENSIONS = {'csv'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route("/")
 def hello():
@@ -35,14 +40,21 @@ def hello():
 @app.route("/calculate", methods=['POST'])
 def calculate():
     # Check if csv
-    df = pandas.read_csv(request.files["file"])
-    timeframe = request.form['timeframe']
-    stats = {
+    file = request.files["file"]
+    if file.filename == '':
+        return ('No selected file')
+    elif file and allowed_file(file.filename):
+        df = pandas.read_csv(file)
+        timeframe = request.form['timeframe']
+        stats = {
         "histogram":returns(df,timeframe),
         "ATR":atr(df,timeframe)
-    }
-    stats = json.dumps(stats)
-    return stats
+        }
+        stats = json.dumps(stats)
+        return stats
+    else :
+        return("Only csv files are accepted")
+  
 
 if __name__ == '__main__':
     print("Server started")
