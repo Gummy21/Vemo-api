@@ -1,4 +1,4 @@
-# Vemo-api
+# Volme-api
 Python back-end of vemo that handles the calculations 
 
 
