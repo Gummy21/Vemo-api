@@ -41,6 +41,7 @@ def hello():
 def calculate():
     # Check if csv
     file = request.files["file"]
+    print(file)
     if file.filename == '':
         return ('No selected file')
     elif file and allowed_file(file.filename):
