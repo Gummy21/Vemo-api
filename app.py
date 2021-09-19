@@ -45,16 +45,29 @@ def calculate():
     if file.filename == '':
         return ('No selected file')
     elif file and allowed_file(file.filename):
+
         df = pandas.read_csv(file)
         timeframe = request.form['timeframe']
-        stats = {
-        "histogram":returns(df,timeframe),
-        "ATR":atr(df,timeframe)
-        }
+        stats = {}
+        if returns(df,timeframe)[0] & atr(df,timeframe)[0]:
+            print("heloo")
+            stats = {
+                "histogram":returns(df,timeframe)[1],
+                "ATR":atr(df,timeframe)[1]
+            }
+        else :
+           print("dwqdq")
+           stats = {
+                "Error":"Double check the data is in the right format"
+            }   
+        
+        
+        
         stats = json.dumps(stats)
         return stats
     else :
-        return("Only csv files are accepted")
+        error = ["Only csv files are accepted"]
+        return error
   
 
 if __name__ == '__main__':
